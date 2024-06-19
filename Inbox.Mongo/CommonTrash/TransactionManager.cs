@@ -6,23 +6,23 @@ namespace Inbox.Mongo.CommonTrash
     {
         private object _lock = new object();
         private IClientSessionHandle clientSessionHandle;
-        public IClientSessionHandle GetClientSession
-        {
-            get
-            {
-                if(clientSessionHandle == null)
-                {
-                    lock (_lock)
-                    {
-                        if(clientSessionHandle is null)
-                        {
-                            clientSessionHandle = new IClientSessionHandle();
-                        }
-                    }
-                }
+        //public IClientSessionHandle GetClientSession
+        //{
+        //    get
+        //    {
+        //        if(clientSessionHandle == null)
+        //        {
+        //            lock (_lock)
+        //            {
+        //                if(clientSessionHandle is null)
+        //                {
+        //                    clientSessionHandle = new IClientSessionHandle();
+        //                }
+        //            }
+        //        }
 
-                return clientSessionHandle;
-            }
-        }
+        //        return clientSessionHandle;
+        //    }
+        //}
     }
 }

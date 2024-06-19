@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Events\Events.csproj" />
+    <ProjectReference Include="..\Inbox.Mongo\Inbox.Mongo.csproj" />
     <ProjectReference Include="..\KafkaInbox\KafkaInbox.csproj" />
   </ItemGroup>
 

@@ -29,8 +29,6 @@ namespace KafkaInbox.Handle
                 await inboxTransaction.Start(cancellationToken);
                 // 
                 await Execute((TEvent)inboxMessage.EventContent, cancellationToken);
-                // типа закончили
-                inboxMessage.DtComplete = DateTime.UtcNow;
                 await inboxTransaction.Commit(inboxMessage, cancellationToken);
             }
             catch (Exception e)

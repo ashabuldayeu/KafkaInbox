@@ -65,7 +65,7 @@ namespace KafkaInbox.Handle
             if (_partitionsHandlers.ContainsKey(partition))
             {
                 // error?
-                return;
+                return; 
             }
 
             var cancellationSource = new CancellationTokenSource();

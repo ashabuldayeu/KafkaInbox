@@ -9,7 +9,7 @@ namespace Inbox.Mongo
 {
     public class InboxStorage : MongoRepositoryBase<InboxMessage>, IInboxStorage
     {
-        public InboxStorage(IMongoDbProvider mongoDbProvider) : base(mongoDbProvider)
+        public InboxStorage(WriteMongoDbProvider mongoDbProvider) : base(mongoDbProvider)
         {
         }
 

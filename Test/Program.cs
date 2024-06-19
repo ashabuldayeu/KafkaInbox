@@ -1,8 +1,13 @@
 using Confluent.Kafka;
 using Events;
+using Inbox.Mongo;
+using Inbox.Mongo.CommonTrash;
+using Inbox.Mongo.CommonTrash.Configs;
+using Inbox.Mongo.CommonTrash.Provider;
 using KafkaInbox;
 using KafkaInbox.Handle;
 using KafkaInbox.Persistence;
+using KafkaInbox.Persistence.Transaction;
 using Test;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,22 +19,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton(x => new WriteConnection(builder.Configuration.GetSection(WriteMongoDbConfigSection.SectionName).Get<WriteMongoDbConfigSection>().ConnectionString));
+builder.Services.AddSingleton<WriteMongoDbProvider>();
+builder.Services.AddSingleton<IInboxStorage, InboxStorage>();
+
+builder.Services.AddScoped<IInboxMessageCommitHandle, InboxMessageCommitHandle>();
+builder.Services.AddScoped<IInboxTransaction, MongoInboxTransaction>();
+builder.Services.AddScoped<TransactionManager>();
+builder.Services.AddSingleton<IInboxMessageProcessor<Event>, EventInboxProc>();
 builder.Services.AddHostedService(s => new InboxConsumer<string, Event>(
       "testing"
     , s.GetRequiredService<IInboxStorage>()
     , new JsonDes()
     , new Confluent.Kafka.ConsumerConfig()
     {
-        Acks = Acks.Leader,
         AllowAutoCreateTopics = false,
         BootstrapServers = "localhost:60704",
         GroupId = "api-1",
+        AutoOffsetReset = AutoOffsetReset.Earliest,
+        EnableAutoCommit = false
     }
     , new InboxJobHandle<Event>(
           s.GetRequiredService<IInboxStorage>()
         , "testing"
         , s.GetRequiredService<IInboxMessageProcessor<Event>>())
-    ) );
+    )) ;
 
 var app = builder.Build();
 
