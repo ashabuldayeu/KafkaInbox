@@ -3,7 +3,7 @@
     public interface IInboxTransaction : IDisposable
     {
         Task Start(CancellationToken cancellationToken);
-        Task Commit(CancellationToken cancellationToken);
+        Task Commit(InboxMessage inboxMessage, CancellationToken cancellationToken);
         Task Rollback(CancellationToken cancellationToken);
     }
 }

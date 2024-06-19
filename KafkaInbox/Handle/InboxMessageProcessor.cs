@@ -24,7 +24,6 @@ namespace KafkaInbox.Handle
         {
             using var scope = _scopeFactory.CreateScope();
             using IInboxTransaction inboxTransaction = scope.ServiceProvider.GetRequiredService<IInboxTransaction>();
-            var inboxStorage = scope.ServiceProvider.GetRequiredService<IInboxStorage>();
             try
             {
                 await inboxTransaction.Start(cancellationToken);
@@ -32,10 +31,7 @@ namespace KafkaInbox.Handle
                 await Execute((TEvent)inboxMessage.EventContent, cancellationToken);
                 // типа закончили
                 inboxMessage.DtComplete = DateTime.UtcNow;
-
-                await inboxStorage.UpdateAsync(inboxMessage, cancellationToken);
-
-                await inboxTransaction.Commit(cancellationToken);
+                await inboxTransaction.Commit(inboxMessage, cancellationToken);
             }
             catch (Exception e)
             {

@@ -1,4 +1,6 @@
-﻿namespace KafkaInbox.Persistence
+﻿using KafkaInbox.Persistence.Transaction;
+
+namespace KafkaInbox.Persistence
 {
     public interface IInboxStorage
     {
@@ -16,7 +18,7 @@
         /// <param name="inboxMessage"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateAsync(InboxMessage inboxMessage, CancellationToken cancellationToken);
+        Task UpdateAsync(InboxMessage inboxMessage, IInboxTransaction transaction, CancellationToken cancellationToken);
 
         Task<InboxMessage> EarliestAsync(string topic, int partition, CancellationToken cancellationToken);
     }

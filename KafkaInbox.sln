@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaInbox", "KafkaInbox\KafkaInbox.csproj", "{2678A25A-0EB4-470C-BB59-EF936A4633F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaInbox", "KafkaInbox\KafkaInbox.csproj", "{2678A25A-0EB4-470C-BB59-EF936A4633F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inbox.Mongo", "Inbox.Mongo\Inbox.Mongo.csproj", "{16805B32-7980-44B9-A32B-BA36408F68B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{534DD97D-7134-4FA7-903C-ECBB9414129C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Producer\Producer.csproj", "{28A85727-B05E-4879-B0B5-B57EF8976601}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{97A945E4-0E9A-40F9-9103-FDB3651780AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Events", "Events\Events.csproj", "{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +25,30 @@ Global
 		{2678A25A-0EB4-470C-BB59-EF936A4633F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2678A25A-0EB4-470C-BB59-EF936A4633F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2678A25A-0EB4-470C-BB59-EF936A4633F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16805B32-7980-44B9-A32B-BA36408F68B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16805B32-7980-44B9-A32B-BA36408F68B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16805B32-7980-44B9-A32B-BA36408F68B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16805B32-7980-44B9-A32B-BA36408F68B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534DD97D-7134-4FA7-903C-ECBB9414129C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{534DD97D-7134-4FA7-903C-ECBB9414129C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{534DD97D-7134-4FA7-903C-ECBB9414129C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{534DD97D-7134-4FA7-903C-ECBB9414129C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A85727-B05E-4879-B0B5-B57EF8976601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A85727-B05E-4879-B0B5-B57EF8976601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A85727-B05E-4879-B0B5-B57EF8976601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A85727-B05E-4879-B0B5-B57EF8976601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{534DD97D-7134-4FA7-903C-ECBB9414129C} = {97A945E4-0E9A-40F9-9103-FDB3651780AA}
+		{28A85727-B05E-4879-B0B5-B57EF8976601} = {97A945E4-0E9A-40F9-9103-FDB3651780AA}
+		{2D6CFCAC-E457-41A8-917B-A35BD7AB6D74} = {97A945E4-0E9A-40F9-9103-FDB3651780AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25C50CCA-2889-4153-9E6B-6CD1720495BD}

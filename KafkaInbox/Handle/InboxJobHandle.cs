@@ -2,13 +2,21 @@
 
 namespace KafkaInbox.Handle
 {
-    public class InboxJobHandle<TContent> 
+    public class InboxJobHandle<TContent>
     {
+        // NO EF CORE IN SUCH CASE OR THINK OF CUSTOM LOGIC
         private readonly IInboxStorage _inboxStorage;
         private readonly string _topic;
         protected readonly IInboxMessageProcessor<TContent> _inboxMessageHandler;
         // here should be unique stopping token for each task
         private Dictionary<int, InboxHandleUnit> _partitionsHandlers = [];
+
+        public InboxJobHandle(IInboxStorage inboxStorage, string topic, IInboxMessageProcessor<TContent> inboxMessageHandler)
+        {
+            _inboxStorage = inboxStorage;
+            _topic = topic;
+            _inboxMessageHandler = inboxMessageHandler;
+        }
 
         public void AssignPartitions(IEnumerable<int> partitions)
         {
@@ -64,7 +72,7 @@ namespace KafkaInbox.Handle
 
             // go consuming messages from db 
             var consumingTask = Task.Factory.StartNew(
-                  () => SendEarliestMessageToHandle(partition, cancellationSource.Token)
+                  () => EndlessConsumingLoop(partition, cancellationSource.Token)
                 , cancellationSource.Token
                 , TaskCreationOptions.LongRunning
                 , TaskScheduler.Current);
@@ -82,6 +90,7 @@ namespace KafkaInbox.Handle
                 {
                     // rate limiter?
                     await SendEarliestMessageToHandle(partition, cancellationToken);
+                    await Task.Delay(50);
                 }
             }
             catch (TaskCanceledException)
@@ -95,6 +104,11 @@ namespace KafkaInbox.Handle
         private async Task SendEarliestMessageToHandle(int partition, CancellationToken cancellationToken)
         {
             var inboxMessage = await _inboxStorage.EarliestAsync(_topic, partition, cancellationToken);
+
+            if(inboxMessage is null)
+            {
+                return;
+            }
 
             await _inboxMessageHandler.Handle(inboxMessage, cancellationToken);
         }
