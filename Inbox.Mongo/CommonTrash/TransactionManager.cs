@@ -1,28 +1,44 @@
-﻿using MongoDB.Driver;
+﻿using Confluent.Kafka;
+using Inbox.Mongo.CommonTrash.Provider;
+using MongoDB.Driver;
 
 namespace Inbox.Mongo.CommonTrash
 {
     public class TransactionManager
     {
-        private object _lock = new object();
-        private IClientSessionHandle clientSessionHandle;
-        //public IClientSessionHandle GetClientSession
-        //{
-        //    get
-        //    {
-        //        if(clientSessionHandle == null)
-        //        {
-        //            lock (_lock)
-        //            {
-        //                if(clientSessionHandle is null)
-        //                {
-        //                    clientSessionHandle = new IClientSessionHandle();
-        //                }
-        //            }
-        //        }
+        private readonly WriteMongoDbProvider _writeMongoDbProvider;
 
-        //        return clientSessionHandle;
-        //    }
-        //}
+        public TransactionManager(WriteMongoDbProvider writeMongoDbProvider)
+        {
+            _writeMongoDbProvider = writeMongoDbProvider;
+        }
+        public IClientSessionHandle Transaction { get; private set; }
+
+        public async Task StartTransaction()
+        {
+            if (Transaction is { })
+                return;
+
+            Transaction = await _writeMongoDbProvider.Client.StartSessionAsync();
+
+            Transaction.StartTransaction();
+        }
+       
+        public async Task Commit()
+        {
+            if (Transaction is null)
+                return;
+
+            await Transaction.CommitTransactionAsync();
+            Transaction = null;
+        }
+
+        public async Task Abort()
+        {
+            if(Transaction is null) return;
+
+            await Transaction.AbortTransactionAsync();
+            Transaction = null;
+        }
     }
 }

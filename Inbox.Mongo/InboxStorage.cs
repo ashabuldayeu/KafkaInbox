@@ -19,12 +19,12 @@ namespace Inbox.Mongo
                        x.Topic == topic 
                     && x.Partition == partition 
                     && x.DtComplete == null)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task InsertAsync(InboxMessage inboxMessage, CancellationToken cancellationToken)
         {
-            return _collection.InsertOneAsync(inboxMessage);
+            return _collection.InsertOneAsync(inboxMessage, cancellationToken: cancellationToken);
         }
 
         public Task UpdateAsync(InboxMessage inboxMessage, IInboxTransaction transaction, CancellationToken cancellationToken)

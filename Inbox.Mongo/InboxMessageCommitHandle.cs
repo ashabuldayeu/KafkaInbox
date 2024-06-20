@@ -13,7 +13,7 @@ namespace Inbox.Mongo
 
         public Task Commit(InboxMessage message, CancellationToken cancellationToken)
         {
-            return _collection.ReplaceOneAsync(x => x.Id == message.Id, message);
+            return _collection.ReplaceOneAsync(x => x.Id == message.Id, message, cancellationToken: cancellationToken);
         }
     }
 }
