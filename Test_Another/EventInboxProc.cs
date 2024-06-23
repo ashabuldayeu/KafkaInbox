@@ -1,7 +1,7 @@
 ﻿using Events;
 using KafkaInbox.Handle;
 
-namespace Test
+namespace Test_Another
 {
     public class EventInboxProc : InboxMessageProcessor<Event>
     {

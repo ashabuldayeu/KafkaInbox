@@ -1,14 +1,14 @@
 using Confluent.Kafka;
 using Events;
-using Inbox.Mongo;
-using Inbox.Mongo.CommonTrash;
 using Inbox.Mongo.CommonTrash.Configs;
 using Inbox.Mongo.CommonTrash.Provider;
-using KafkaInbox;
+using Inbox.Mongo.CommonTrash;
+using Inbox.Mongo;
 using KafkaInbox.Handle;
-using KafkaInbox.Persistence;
 using KafkaInbox.Persistence.Transaction;
-using Test;
+using KafkaInbox.Persistence;
+using KafkaInbox;
+using Test_Another;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,8 +45,7 @@ builder.Services.AddHostedService(s => new InboxConsumer<string, Event>(
         , s.GetRequiredService<IInboxMessageProcessor<Event>>()
         , 1)
     , 1
-    )) ;
-
+    ));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

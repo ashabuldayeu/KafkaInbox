@@ -3,7 +3,7 @@ using Confluent.Kafka;
 using Events;
 using System.Text.Json;
 
-const string topic = "testing";
+const string topic = "testing1";
 var config = new ProducerConfig
 {
     // User-specific properties that you must set

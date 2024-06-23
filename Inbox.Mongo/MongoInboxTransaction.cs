@@ -24,11 +24,11 @@ namespace Inbox.Mongo
             {
                 inboxMessage.DtComplete = DateTime.UtcNow;
                 await inboxMessageCommitHandle.Commit(inboxMessage, cancellationToken);
-                //await _transactionManager.GetClientSession.CommitTransactionAsync();
+                //await _transactionManager.Commit(cancellationToken);
             }
             catch (Exception)
             {
-                //await _transactionManager.GetClientSession.AbortTransactionAsync();
+                //await _transactionManager.Abort(cancellationToken);
                 throw;
             }
         }
@@ -38,16 +38,18 @@ namespace Inbox.Mongo
             //_transactionManager.GetClientSession.Dispose();
         }
 
-        public async Task Rollback(CancellationToken cancellationToken)
+        public Task Rollback(CancellationToken cancellationToken)
         {
-          //  if(_transactionManager.GetClientSession.)
-          //await   _transactionManager.GetClientSession.AbortTransactionAsync();
-          
+            //  if(_transactionManager.GetClientSession.)
+            //return _transactionManager.Abort(cancellationToken);
+            return Task.CompletedTask;
+
         }
 
         public Task Start(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //return _transactionManager.StartTransaction(cancellationToken);
+            return Task.CompletedTask;
         }
     }
 }

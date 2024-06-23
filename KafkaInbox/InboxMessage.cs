@@ -10,7 +10,7 @@
 
         public string Type { get; set; }
 
-        public object EventContent { get; set; }
+        public string EventContent { get; set; }
 
         public int Partition { get; set; }
 

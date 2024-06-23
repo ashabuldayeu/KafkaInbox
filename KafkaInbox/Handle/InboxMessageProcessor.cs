@@ -1,6 +1,7 @@
 ﻿using KafkaInbox.Persistence;
 using KafkaInbox.Persistence.Transaction;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 
 namespace KafkaInbox.Handle
 {
@@ -28,7 +29,7 @@ namespace KafkaInbox.Handle
             {
                 await inboxTransaction.Start(cancellationToken);
                 // 
-                await Execute((TEvent)inboxMessage.EventContent, cancellationToken);
+                await Execute(JsonSerializer.Deserialize<TEvent>(inboxMessage.EventContent), cancellationToken);
                 await inboxTransaction.Commit(inboxMessage, cancellationToken);
             }
             catch (Exception e)

@@ -5,17 +5,19 @@ namespace KafkaInbox.Handle
     public class InboxJobHandle<TContent>
     {
         // NO EF CORE IN SUCH CASE OR THINK OF CUSTOM LOGIC
+        private int cons_index_test;
         private readonly IInboxStorage _inboxStorage;
         private readonly string _topic;
         protected readonly IInboxMessageProcessor<TContent> _inboxMessageHandler;
         // here should be unique stopping token for each task
         private Dictionary<int, InboxHandleUnit> _partitionsHandlers = [];
 
-        public InboxJobHandle(IInboxStorage inboxStorage, string topic, IInboxMessageProcessor<TContent> inboxMessageHandler)
+        public InboxJobHandle(IInboxStorage inboxStorage, string topic, IInboxMessageProcessor<TContent> inboxMessageHandler, int index)
         {
             _inboxStorage = inboxStorage;
             _topic = topic;
             _inboxMessageHandler = inboxMessageHandler;
+            cons_index_test = index;
         }
 
         public void AssignPartitions(IEnumerable<int> partitions)
@@ -80,6 +82,7 @@ namespace KafkaInbox.Handle
             var unit = new InboxHandleUnit(consumingTask, cancellationSource, partition);
 
             _partitionsHandlers.Add(partition, unit);
+            Console.WriteLine($"Added cons partition {partition} , index of cons {cons_index_test}");
         }
 
         protected async Task EndlessConsumingLoop(int partition, CancellationToken cancellationToken)

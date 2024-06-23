@@ -2,6 +2,7 @@
 using KafkaInbox.Handle;
 using KafkaInbox.Persistence;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json;
 
 namespace KafkaInbox
 {
@@ -10,13 +11,14 @@ namespace KafkaInbox
         private readonly string _topic;
         private readonly IInboxStorage _inboxStorage;
         private readonly IConsumer<TKey, TContent> _consumer;
-
+        private int _cons_index;
         public InboxConsumer(
               string topic
             , IInboxStorage inboxStorage
             , IDeserializer<TContent> deserializer
             , ConsumerConfig consConf
-            , InboxJobHandle<TContent> inboxJobHandle)
+            , InboxJobHandle<TContent> inboxJobHandle
+            , int cons_index)
         {
             _topic = topic;
             _inboxStorage = inboxStorage;
@@ -30,6 +32,23 @@ namespace KafkaInbox
                 .SetPartitionsRevokedHandler(
                     (x, y) => inboxJobHandle.StopPartitions(y.Select(t => t.Partition.Value).ToList()))
                 .Build();
+            _cons_index = cons_index;
+        }
+
+        public override void Dispose()
+        {
+            try
+            {
+                _consumer?.Unsubscribe();
+            }
+            catch (Exception)
+            {
+
+            }
+            finally
+            {
+                base.Dispose();
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -57,7 +76,7 @@ namespace KafkaInbox
                                 {
                                     DtComplete = null,
                                     DtConsumed = DateTime.UtcNow,
-                                    EventContent = @event,
+                                    EventContent = JsonSerializer.Serialize(@event),
                                     Partition = consRes.Partition.Value,
                                     Topic = _topic,
                                     Type = @event.GetType().Name,

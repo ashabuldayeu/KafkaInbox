@@ -14,30 +14,30 @@ namespace Inbox.Mongo.CommonTrash
         }
         public IClientSessionHandle Transaction { get; private set; }
 
-        public async Task StartTransaction()
+        public async Task StartTransaction(CancellationToken cancellationToken)
         {
             if (Transaction is { })
                 return;
 
-            Transaction = await _writeMongoDbProvider.Client.StartSessionAsync();
+            Transaction = await _writeMongoDbProvider.Client.StartSessionAsync(cancellationToken: cancellationToken);
 
             Transaction.StartTransaction();
         }
        
-        public async Task Commit()
+        public async Task Commit(CancellationToken cancellationToken)
         {
             if (Transaction is null)
                 return;
 
-            await Transaction.CommitTransactionAsync();
+            await Transaction.CommitTransactionAsync(cancellationToken);
             Transaction = null;
         }
 
-        public async Task Abort()
+        public async Task Abort(CancellationToken cancellationToken)
         {
             if(Transaction is null) return;
 
-            await Transaction.AbortTransactionAsync();
+            await Transaction.AbortTransactionAsync(cancellationToken);
             Transaction = null;
         }
     }
